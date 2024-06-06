@@ -6,14 +6,21 @@ import MessageContainer from "./message-container";
 import ChatPlaceHolder from "@/components/home/chat-placeholder";
 import GroupMembersDialog from "./group-members-dialog";
 import { useConversationStore } from "@/store/chat-store";
+import { useConvexAuth } from "convex/react";
 
 const RightPanel = () => {
   const { selectedConversation, setSelectedConversation } =
     useConversationStore();
+
+  const { isLoading } = useConvexAuth();
+
+  if (isLoading) return null;
   if (!selectedConversation) return <ChatPlaceHolder />;
 
-  const conversationName = selectedConversation.groupName || selectedConversation.name
-  const conversationImage = selectedConversation.groupImage || selectedConversation.image
+  const conversationName =
+    selectedConversation.groupName || selectedConversation.name;
+  const conversationImage =
+    selectedConversation.groupImage || selectedConversation.image;
 
   return (
     <div className="w-3/4 flex flex-col">
@@ -22,14 +29,21 @@ const RightPanel = () => {
         <div className="flex justify-between bg-gray-primary p-3">
           <div className="flex gap-3 items-center">
             <Avatar>
-              <AvatarImage src={conversationImage || "/placeholder.png"} className="object-cover" />
+              <AvatarImage
+                src={conversationImage || "/placeholder.png"}
+                className="object-cover"
+              />
               <AvatarFallback>
                 <div className="animate-pulse bg-gray-tertiary w-full h-full rounded-full" />
               </AvatarFallback>
             </Avatar>
             <div className="flex flex-col">
               <p>{conversationName}</p>
-              {selectedConversation.isGroup && <GroupMembersDialog selectedConversation={selectedConversation} />}
+              {selectedConversation.isGroup && (
+                <GroupMembersDialog
+                  selectedConversation={selectedConversation}
+                />
+              )}
             </div>
           </div>
 
